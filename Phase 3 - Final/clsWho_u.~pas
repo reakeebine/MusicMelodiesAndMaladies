@@ -1,0 +1,75 @@
+unit clsWho_u;  //Similar to Finish the Lyric
+
+interface
+
+uses
+  SysUtils;
+
+type
+  TWho = class
+  private
+    fArtistName, fLyric, fIncorrectArtist1, fIncorrectArtist2, fFileName : string;  //Do not need SongTitle as this was just to keep track of in database
+  public
+    sRandArt1, sRandArt2, sRandArt3 : string;
+    constructor create(pArtistName, pLyric, pIncorrectArtist1, pIncorrectArtist2, pFileName : string);
+    function getLyric : string;
+    function getArtistName : string;  //Never need to access IncorrectArtists outside of this class
+    function getFileName : string;
+    procedure RandomizeArtists;
+  end;
+
+
+implementation
+
+var
+  arrRandomArt : array[1..3] of string;
+
+{ TWho }
+
+constructor TWho.create(pArtistName, pLyric, pIncorrectArtist1, pIncorrectArtist2, pFileName: string);
+begin
+  fArtistName := pArtistName;
+  fLyric := pLyric;
+  fIncorrectArtist1 := pIncorrectArtist1;
+  fIncorrectArtist2 := pIncorrectArtist2;
+  fFileName := pFileName;
+end;
+
+function TWho.getArtistName: string;
+begin
+  Result := TrimRight(fArtistName);
+end;
+
+function TWho.getFileName: string;
+begin
+  Result := TrimRight(fFileName);
+end;
+
+function TWho.getLyric: string;
+begin
+  Result := TrimRight(fLyric);
+end;
+
+procedure TWho.RandomizeArtists;  //This links my array of artists to an array of random numbers. The array of numbers is then ordered, while simultaneously mixing up the artists.
+var
+  e, f, g : integer;
+begin
+  arrRandomArt[1] := fArtistName;
+  arrRandomArt[2] := fIncorrectArtist1;
+  arrRandomArt[3] := fIncorrectArtist2;
+  e := 0;
+  f := 0;
+  g := 0;
+  While (e = f) OR (f = g) OR (e = g) do
+    begin
+      Randomize;
+      e := Random(3)+1;
+      f := Random(3)+1;
+      g := Random(3)+1;
+    end;
+  sRandArt1 := arrRandomArt[e];
+  sRandArt2 := arrRandomArt[f];
+  sRandArt3 := arrRandomArt[g];
+end;
+
+end.
